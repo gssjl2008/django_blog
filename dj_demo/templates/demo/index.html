@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index Title</title>
+     {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "demo/css/demo.css" %}">
+</head>
+<body>
+    <div class="title">
+        <h1 align="center">Welcome Demo Index Page</h1>
+    </div>
+    <div>
+        <li><a href="{% url 'demo:admin' %}">管理页面</a></li>
+    </div>
+</body>
+</html>
