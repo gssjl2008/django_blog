@@ -5,10 +5,13 @@
 #@desc:
 
 from django.urls.conf import path
-from .views import index, article
+from .views import index, article, admin, about, contact
 
 app_name = 'blog'
 urlpatterns = [
     path('', index, name='index'),
-    path('article/<int:id>', article, name='article')
+    path('article/<int:id>', article, name='article'),
+    path('admin', admin, name='admin'),
+    path('about', about, name='about'),
+    path('contact', contact, name='contact')
 ]

@@ -5,21 +5,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Blog</title>
-    <!-- Required meta tags -->
+    <!-- 适配 phone, pad 等机器 -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- 引用bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
-<body">
+<body>
 
         <div class="container">
-          <header class="bg-light sticky-top">
+            <!-- sticky-top -->
+          <header class="row bg-light sticky-top">
               <div class="container">
                 <div class="row bg-light shadow">
                     {% for menu in menus %}
-                        <a class="nav-link" href="{% url 'blog:index' %}"><b>{{ menu.name }}</b></a>
+                        <a class="nav-link" href="{{ menu.get_method_url }}"><b>{{ menu.name }}</b></a>
                     {% endfor %}
                 </div>
               </div>
@@ -29,33 +30,36 @@
             <div class="col">
                 <div class="row">
                     <div class="col-11 border rounded">
-                        导航区
+                        <ul>
+                            {% for category in categories %}
+                                <li class="">{{ category.name }}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                     <!--<div class="col">-->
                     <!--</div>-->
                 </div>
             </div>
 
-            <div class="col-6 border rounded">
+            <div class="col-9 shadow rounded">
                 <ul>
                     {% for article in articles %}
                         <!-- article 必须传入参数， article.id 作为参数传入 -->
-                        <li><h6><a href="{% url 'blog:article' article.id %}">{{ article.title }} {{ article.author}}{{article.create_time}}</a></h6></li>
+                        <li class="h6 text-between"><a href="{{ article.get_absolute_url }}">{{ article.title }} {{ article.author}}{{article.create_time|date:"Y-m-d H:i:s"}}</a></li>
                     {% endfor %}
-                    1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
+                    <!--1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>-->
                 </ul>
             </div>
 
-            <div class="col ">
-                <div class="row">
-                    <!--<div class="col">-->
+            <!--<div class="col ">-->
+                <!--<div class="row">-->
+                    <!--&lt;!&ndash;<div class="col">&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--<div class="col-11 border rounded offset-1">-->
+                        <!--<span>评论</span>-->
                     <!--</div>-->
-                    <div class="col-11 border rounded offset-1">
-                        <span>评论</span>
-                    </div>
-                </div>
-
-            </div>
+                <!--</div>-->
+            <!--</div>-->
         </div>
         <div class="row border bg-light fixed-bottom">
             <footer class="container">
