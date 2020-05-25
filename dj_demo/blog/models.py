@@ -2,18 +2,41 @@ from django.db import models
 
 # Create your models here.
 from django.contrib.auth.models import User
+from django.utils.timezone import datetime
+
+
 
 class Author(models.Model):
+    '''
+    一对一 User，默认User字段
+        username：用户名
+        email: 电子邮件
+        password：密码
+        first_name：名
+        last_name：姓
+        is_active: 是否为活跃用户。默认是True
+        is_staff: 是否为员工。默认是False
+        is_superuser: 是否为管理员。默认是False
+        date_joined: 加入日期。系统自动生成
 
+    扩展添加
+        phone: 手机号码
+        mod_time: 修改时间
+    '''
     author_name = models.OneToOneField(User, max_length=50, on_delete=models.CASCADE, related_name='author')
     phone = models.CharField(verbose_name='手机号码', max_length=20)
-    create_time = models.DateTimeField(verbose_name='创建时间', auto_created=True)
+    # auto_now 系统自动生成， 也就是不能再手动给它存非当前时间的值
+    # auto_now_add 每次修改则会更新时间, 可以设置其他值
+    # update 和 save 都无法更改 auto_now_add 的值， 而 save 可改变 auto_now 的值
+    # auto_now 一般用于 修改时间， auto_now_add 一般用于创建时间
+    # 以上两个选项都不会出现再注册页面， 如需要显示，则需要设置属性 mod_time.editable = True 即可。
+    mod_time = models.DateTimeField(verbose_name='修改时间', blank=True, auto_now=True)
 
 
     class Meta:
         verbose_name = 'Author'
         verbose_name_plural = verbose_name
-        ordering = ['create_time']
+        # ordering = (User.date_joined,)
 
     def __str__(self):
         return self.author_name.username
@@ -66,7 +89,7 @@ class Article(models.Model):
     class Meta:
         verbose_name = 'Article'
         verbose_name_plural = verbose_name
-        ordering = ['create_time']
+        ordering = ['-create_time']
 
     def __str__(self):
         return self.title
@@ -83,6 +106,7 @@ class Menu(models.Model):
     class Meta:
         verbose_name = 'Menu'
         verbose_name_plural = verbose_name
+        ordering = ['rank']
 
     def __str__(self):
         return self.name

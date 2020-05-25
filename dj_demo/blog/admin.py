@@ -38,11 +38,18 @@ class Article_admin(admin.ModelAdmin):
         # obj.author = request.user
         # super().save_model(request, obj, form, change)
 
+class Menu_Admin(admin.ModelAdmin):
+    list_display = ['name', 'rank']
+
 clses = importlib.import_module('blog.models')
 
 for cls in dir(clses):
+    if cls in ('datetime', 'User'):
+        continue
     if cls == 'Article':
         admin.site.register(getattr(clses, cls, None), Article_admin)
+    elif cls == 'Menu':
+        admin.site.register(getattr(clses, cls, None), Menu_Admin)
     else:
         cls = getattr(clses, cls, None)
         if isinstance(cls, type):
