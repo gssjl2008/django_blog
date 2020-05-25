@@ -38,11 +38,12 @@ class Blog_register(forms.Form):
     disabled=False,              是否可以编辑
     label_suffix=None            Label内容后缀
     '''
-    username = forms.CharField(label='Username', max_length=50) # , widget=forms.TextInput(attrs={'class':'form-control'}))
-    email = forms.EmailField(label='Email')
-    phone = forms.CharField(label='Phone', max_length=20, required=False)
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput)
+    username = forms.CharField(label='Username', max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
+    email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={'class':'form-control'}))
+    phone = forms.CharField(label='Phone', max_length=20, required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
 
     # self._clean_字段名()        # 针对单个字段预留的方法（也就是该字段通过form验证以后就会触发该对应名字的自定义方法）
     # self._clean_form()         # 针对多个字段预留的方法
@@ -112,8 +113,8 @@ class Blog_register(forms.Form):
 
 class Blog_login(forms.Form):
 
-    username = forms.CharField(label='Username', max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
+    username = forms.CharField(label='Username', max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}), )
     password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
-
+    remember = forms.BooleanField(label='Remember me')
 
 

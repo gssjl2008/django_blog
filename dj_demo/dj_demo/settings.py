@@ -115,11 +115,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/blog/login'
+
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS =[
