@@ -6,6 +6,10 @@
 </head>
 <body>
     <p class="h1">Blog User Page</p>
+    <div class="row">
+        <a href="{% url 'blog:update' user.username %}">Change Password</a>
+        <a href="{% url 'blog:logout' %}">Log out</a>
+    </div>
 
     <p>username: {{ user.username }}</p>
     <p>password: {{ user.password }}</p>

@@ -4,6 +4,7 @@
 #@time: 2020/5/25 10:25
 #@desc:
 
+from django.contrib import auth
 from django.contrib.auth.models import User
 from django import forms
 import re
@@ -115,6 +116,33 @@ class Blog_login(forms.Form):
 
     username = forms.CharField(label='Username', max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}), )
     password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
-    remember = forms.BooleanField(label='Remember me')
+    # remember = forms.BooleanField(label='Remember me')
 
+class Blog_update(forms.Form):
+
+    origin_password = forms.CharField(label='Origin Password', max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password1 = forms.CharField(label='New Password', max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(label='Confirmation Password', max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+    def clean_origin_password(self):
+        origin_password = self.cleaned_data.get('origin_password')
+        if not auth.authenticate(self.cleaned_data.get('username'), password=origin_password):
+            raise forms.ValidationError("Password is wrong!")
+        return origin_password
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+        if len(password1) < 6:
+            raise forms.ValidationError("Password is too short!")
+        elif len(password1) > 20:
+            raise forms.ValidationError("Password is too long!")
+        return password1
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+
+        if all([password1, password2]) and password1 != password2:
+            raise forms.ValidationError("Password miss match, Please enter again!")
+        return password2
 
