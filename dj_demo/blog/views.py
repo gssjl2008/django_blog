@@ -3,20 +3,50 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect, reverse
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.views.generic import ListView, DetailView, FormView
 
 # Create your views here.
 from .models import Article, Menu, Category, Author
 from .forms import Blog_login, Blog_register, Blog_update
 from django.contrib.auth.decorators import login_required
 
-@login_required
-def index(request):
-    # - 倒叙从大到小， 不加则是顺序从小到大
+# @login_required
+# def index(request):
+#     # - 倒叙从大到小， 不加则是顺序从小到大
+#
+#     articles = Article.objects.all().order_by('-create_time')
+#     menus = Menu.objects.all()
+#     categories = Category.objects.all()
+#     return render(request, 'blog/index.html', {'articles': articles, 'menus': menus, 'categories':categories})
 
-    articles = Article.objects.all().order_by('-create_time')
-    menus = Menu.objects.all()
-    categories = Category.objects.all()
-    return render(request, 'blog/index.html', {'articles': articles, 'menus': menus, 'categories':categories})
+class Index_view(ListView):
+
+    template_name = 'blog/index.html'
+    context_object_name = 'articles'
+    # 等同于 articles = Article.objects.all(), 赋予的变量默认为 object_list或article_list, 返回的模板名称 app_name/model_name_list.html, 可以使用
+    model = Article
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        '''
+        增加返回的属性,比如menu菜单类
+        '''
+        menus = Menu.objects.all()
+        categories = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['menus'] = menus
+        context['categories'] = categories
+        return context
+
+    def get_queryset(self):
+        '''
+        过滤用户只能看到自己的文章,
+        '''
+        # if self.request.user.username == 'root':
+        #     super().get_queryset()
+        # else:
+        return Article.objects.filter(id=self.request.user.id)
+
+
 
 @login_required
 def article(request, id):
@@ -92,9 +122,6 @@ def update(request, name):
         form = Blog_update()
     return render(request, 'blog/update.html', {'form': form, 'text': 'Change Password!'})
 
-@login_required
-def logout(request):
+def logout(request, name):
     auth.logout(request)
-    form = Blog_login()
-    # return  render(request, 'blog/login.html', {'form': form, 'text': 'Please sign in again!'})
     return redirect(reverse('blog:login'))

@@ -5,11 +5,12 @@
 #@desc:
 
 from django.urls.conf import path
-from .views import index, article, admin, about, contact, login, register, user, update, logout
+from .views import Index_view, article, admin, about, contact, login, register, user, update, logout
 
 app_name = 'blog'
 urlpatterns = [
-    path('', index, name='index'),
+    # path('', index, name='index'),
+    path('', Index_view.as_view(), name='index'),
     path('article/<int:id>', article, name='article'),
     path('admin', admin, name='admin'),
     path('about', about, name='about'),
@@ -18,5 +19,5 @@ urlpatterns = [
     path('login', login, name='login'),
     path('user/<name>', user, name='user'),
     path('user/<name>/update', update, name='update'),
-    path('user/logout', logout, name='logout')
+    path('user/<name>/logout', logout, name='logout'),
 ]
