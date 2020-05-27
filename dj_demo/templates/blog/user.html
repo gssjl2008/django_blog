@@ -1,19 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Blog User Page</title>
-</head>
-<body>
-    <p class="h1">Blog User Page</p>
-    <div class="row">
-        <a href="{% url 'blog:update' user.username %}">Change Password</a>
-        <a href="{% url 'blog:logout' %}">Log out</a>
+{% extends 'blog/base_index.html' %}
+{{ title }}
+
+{% block content %}
+<main role="main" class="container">
+    <div class="jumbotron">
+        <h1>Navbar example</h1>
+        <p>username: {{ user.username }}</p>
+        <p>password: {{ user.password }}</p>
+        <p>date_joined: {{ user.date_joined }}</p>
+        <a class="btn btn-lg btn-primary" href="/docs/components/navbar/" role="button">View navbar docs &raquo;</a>
+    </div>
+</main>
+    <div>
+
     </div>
 
-    <p>username: {{ user.username }}</p>
-    <p>password: {{ user.password }}</p>
-    <p>date_joined: {{ user.date_joined }}</p>
 
-</body>
-</html>
+{% endblock %}

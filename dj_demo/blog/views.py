@@ -113,7 +113,8 @@ def login(request):
 @login_required
 def user(request):
     user = get_object_or_404(User, username=request.user.username)
-    return render(request, 'blog/user.html', {'user': user})
+    menus = Menu.objects.all()
+    return render(request, 'blog/user.html', {'user': user, 'menus': menus})
 
 
 @login_required
