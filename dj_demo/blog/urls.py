@@ -5,7 +5,8 @@
 #@desc:
 
 from django.urls.conf import path
-from .views import Index_view, article, admin, about, contact, login, register, user, update, logout
+from django.contrib.auth.views import LogoutView
+from .views import Index_view, article, admin, about, contact, login, register, user, update
 
 app_name = 'blog'
 urlpatterns = [
@@ -17,7 +18,7 @@ urlpatterns = [
     path('contact', contact, name='contact'),
     path('register', register, name='register'),
     path('login', login, name='login'),
-    path('user/<name>', user, name='user'),
+    path('user', user, name='user'),
     path('user/<name>/update', update, name='update'),
-    path('user/<name>/logout', logout, name='logout'),
+    path('logout', LogoutView.as_view(), name='logout'),
 ]

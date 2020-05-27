@@ -28,7 +28,7 @@
                         </label>
                     </div>
                 {% else %}
-                    <label class="sr-only" for="{{ foo.id_for_label }}">{{ foo.label }}</label>{{ foo }}
+                    <label for="{{ foo.id_for_label }}">{{ foo.label }}</label>{{ foo }}
                 {% endif  %}
             {% endfor %}
             <input type="submit" value="Submit" class="btn btn-lg btn-primary btn-block">

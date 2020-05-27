@@ -95,6 +95,7 @@ class Article(models.Model):
         return self.title
 
 class Menu(models.Model):
+
     name = models.CharField(verbose_name='菜单名称', max_length=20)
     rank = models.IntegerField(verbose_name='菜单排名', auto_created=True, unique=True)
     method = models.CharField(verbose_name='菜单方法', max_length=20, blank=True)

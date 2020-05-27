@@ -117,6 +117,8 @@ USE_TZ = True
 
 LOGIN_URL = '/blog/login'
 
+LOGOUT_REDIRECT_URL = '/blog/login'
+
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
 
 # Static files (CSS, JavaScript, Images)

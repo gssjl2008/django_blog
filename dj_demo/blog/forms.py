@@ -124,11 +124,14 @@ class Blog_update(forms.Form):
     password1 = forms.CharField(label='New Password', max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(label='Confirmation Password', max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
-    def clean_origin_password(self):
-        origin_password = self.cleaned_data.get('origin_password')
-        if not auth.authenticate(self.cleaned_data.get('username'), password=origin_password):
-            raise forms.ValidationError("Password is wrong!")
-        return origin_password
+    # def clean_origin_password(self):
+    #     origin_password = self.cleaned_data.get('origin_password')
+    #     print(f"origin_password: {origin_password}")
+    #     user = auth.authenticate(username=self.cleaned_data.get('username'), password=origin_password)
+    #     print(f"user: {user}")
+    #     if not user:
+    #         raise forms.ValidationError("Password is wrong!")
+    #     return origin_password
 
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')

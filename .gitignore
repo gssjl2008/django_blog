@@ -59,7 +59,7 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
+# db.sqlite3
 
 # Flask stuff:
 instance/
@@ -140,3 +140,7 @@ dj_demo/blog/migrations/__pycache__/
 dj_demo/demo/__pycache__/
 dj_demo/demo/migrations/__pycache__/
 dj_demo/dj_demo/__pycache__/
+.idea/dataSources/45061990-3ecd-4254-98ab-971fa4d7431b.xml
+.idea/dataSources/45061990-3ecd-4254-98ab-971fa4d7431b/
+.idea/inspectionProfiles/
+requirements.txt

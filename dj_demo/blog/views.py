@@ -4,11 +4,12 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, re
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.views.generic import ListView, DetailView, FormView
-
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 # Create your views here.
 from .models import Article, Menu, Category, Author
 from .forms import Blog_login, Blog_register, Blog_update
-from django.contrib.auth.decorators import login_required
+
 
 # @login_required
 # def index(request):
@@ -21,10 +22,19 @@ from django.contrib.auth.decorators import login_required
 
 class Index_view(ListView):
 
-    template_name = 'blog/index.html'
+    template_name = 'blog/base_index.html'
     context_object_name = 'articles'
-    # 等同于 articles = Article.objects.all(), 赋予的变量默认为 object_list或article_list, 返回的模板名称 app_name/model_name_list.html, 可以使用
+    queryset = Article.objects.all().order_by('-create_time')
+    http_method_names = 'get'       # 限制使用的方法
+
+
+
+    # model=Article 就这一句等同于 articles = Article.objects.all(), 赋予的变量默认为 object_list或article_list, 返回的模板名称 app_name/model_name_list.html, 使用类视图，上面可以的全局变量，可以定义这些默认值。
     model = Article
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         '''
@@ -92,7 +102,7 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if  user is not None and user.is_active:
                 auth.login(request, user)
-                return redirect(reverse('blog:user', args=[user.username]))
+                return redirect(reverse('blog:user'))
             else:
                 return render(request, 'blog/login.html', {'form': form, 'message':'Wrong account or password, Please try again.'})
     else:
@@ -101,27 +111,27 @@ def login(request):
 
 
 @login_required
-def user(request, name):
-    if request.user.username == name:
-        user = get_object_or_404(User, username=name)
-        return render(request, 'blog/user.html', {'user': user})
-    else:
-        raise Http404()
+def user(request):
+    user = get_object_or_404(User, username=request.user.username)
+    return render(request, 'blog/user.html', {'user': user})
+
 
 @login_required
 def update(request, name):
-    print(f"request.user: {request.user}, {dir(request)}")
     user = get_object_or_404(User, username=name)
     form = Blog_update(request.POST)
+
     if form.is_valid():
-        password1 = form.cleaned_data.get('password1')
-        user.set_password(password1)
-        user.save()
-        #return render(request, 'blog/update.html', {'form': form, 'text':'Change Password!'})
+        user = auth.authenticate(username=user.username, password=form.cleaned_data.get('origin_password'))
+        if user is not None:
+            password1 = form.cleaned_data.get('password1')
+            user.set_password(password1)
+            user.save()
+            return redirect(reverse('blog:login'))
+        else:
+            return render(request, 'blog/login.html',
+                          {'form': form, 'message': 'Wrong account or password, Please try again.'})
     else:
         form = Blog_update()
-    return render(request, 'blog/update.html', {'form': form, 'text': 'Change Password!'})
+        return render(request, 'blog/update.html', {'form': form, 'text': 'Change Password!', 'message':'Wrong password, Please try again.'})
 
-def logout(request, name):
-    auth.logout(request)
-    return redirect(reverse('blog:login'))
