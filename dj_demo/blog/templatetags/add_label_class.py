@@ -12,3 +12,8 @@ register = template.Library()
 @register.filter(is_safe=True)
 def label_with_classes(value, arg):
     return value.label_tag(attrs={'class': arg})
+
+@register.simple_tag
+def call_method(obj, method, *args):
+    method = getattr(obj, method)
+    return method(*args)

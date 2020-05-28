@@ -6,7 +6,7 @@
 
 from django.urls.conf import path
 from django.contrib.auth.views import LogoutView
-from .views import Index_view, article, admin, about, contact, login, register, user, update
+from .views import Index_view, article, admin, about, contact, login, register, update, User_view
 
 app_name = 'blog'
 urlpatterns = [
@@ -18,7 +18,7 @@ urlpatterns = [
     path('contact', contact, name='contact'),
     path('register', register, name='register'),
     path('login', login, name='login'),
-    path('user', user, name='user'),
-    path('user/<name>/update', update, name='update'),
+    path('user/<int:pk>', User_view.as_view(), name='user'),
+    path('user/<int:pk>/update', update, name='update'),
     path('logout', LogoutView.as_view(), name='logout'),
 ]

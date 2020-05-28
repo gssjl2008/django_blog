@@ -149,3 +149,11 @@ class Blog_update(forms.Form):
             raise forms.ValidationError("Password miss match, Please enter again!")
         return password2
 
+class Article_form(forms.Form):
+
+    title = forms.CharField(label='标题', max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
+    sub_title = forms.CharField(label='副标题', max_length=140, widget=forms.TextInput(attrs={'class':'form-control'}))
+    overview = forms.CharField(label='概要', max_length=200, widget=forms.TextInput(attrs={'class':'form-control'}))
+    text = forms.CharField(label='正文', widget=forms.TextInput(attrs={'class':'form-control'}))
+    # category = forms.ChoiceField(choices=([1, ]))
+    # tag = models.ManyToManyField(Tag, verbose_name='标签' ,related_name='tags', blank=True)

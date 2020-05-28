@@ -100,8 +100,10 @@ class Menu(models.Model):
     rank = models.IntegerField(verbose_name='菜单排名', auto_created=True, unique=True)
     method = models.CharField(verbose_name='菜单方法', max_length=20, blank=True)
 
-    def get_method_url(self):
+    def get_method_url(self, name=None):
         from django.urls import reverse
+        if self.method in ('user', 'update'):
+            return reverse('blog:%s' %self.method, args=[name])
         return reverse('blog:%s' %self.method)
 
     class Meta:

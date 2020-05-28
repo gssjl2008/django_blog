@@ -12,27 +12,28 @@
     <link href="{% static 'blog/css/signin.css' %}" rel="stylesheet">
 
 </head>
-<body class="text-center">
-    <div class="form-signin">
-        {% if message %}
-            {{ message }}
-        {% endif %}
-        <form action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-            {% for foo in form %}
-                {% if foo.label == 'Remember me' %}
-                    <div class="checkbox mb-3">
-                        <label for="{{ foo.id_for_label }}">{{ foo.label }}
-                            {{ foo }}
-                        </label>
-                    </div>
-                {% else %}
-                    <label for="{{ foo.id_for_label }}">{{ foo.label }}</label>{{ foo }}
-                {% endif  %}
-            {% endfor %}
-            <input type="submit" value="Submit" class="btn btn-lg btn-primary btn-block">
-        </form>
-    </div>
+<body>
+
+        <div class="form-signin text-center">
+            {% if message %}
+                {{ message }}
+            {% endif %}
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                {% for foo in form %}
+                    {% if foo.label == 'Remember me' %}
+                        <div class="checkbox mb-3">
+                            <label for="{{ foo.id_for_label }}">{{ foo.label }}
+                                {{ foo }}
+                            </label>
+                        </div>
+                    {% else %}
+                        <label for="{{ foo.id_for_label }}">{{ foo.label }}</label>{{ foo }}
+                    {% endif  %}
+                {% endfor %}
+                <input type="submit" value="Submit" class="btn btn-lg btn-primary btn-block">
+            </form>
+        </div>
 </body>
 </html>

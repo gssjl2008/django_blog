@@ -3,12 +3,12 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect, reverse
 from django.contrib.auth.models import User
 from django.contrib import auth
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import ListView, DetailView, FormView, CreateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 # Create your views here.
 from .models import Article, Menu, Category, Author
-from .forms import Blog_login, Blog_register, Blog_update
+from .forms import Blog_login, Blog_register, Blog_update, Article_form
 
 
 # @login_required
@@ -22,12 +22,10 @@ from .forms import Blog_login, Blog_register, Blog_update
 
 class Index_view(ListView):
 
-    template_name = 'blog/base_index.html'
+    template_name = 'blog/index.html'
     context_object_name = 'articles'
     queryset = Article.objects.all().order_by('-create_time')
     http_method_names = 'get'       # 限制使用的方法
-
-
 
     # model=Article 就这一句等同于 articles = Article.objects.all(), 赋予的变量默认为 object_list或article_list, 返回的模板名称 app_name/model_name_list.html, 使用类视图，上面可以的全局变量，可以定义这些默认值。
     model = Article
@@ -51,9 +49,6 @@ class Index_view(ListView):
         '''
         过滤用户只能看到自己的文章,
         '''
-        # if self.request.user.username == 'root':
-        #     super().get_queryset()
-        # else:
         return Article.objects.filter(id=self.request.user.id)
 
 
@@ -102,24 +97,46 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if  user is not None and user.is_active:
                 auth.login(request, user)
-                return redirect(reverse('blog:user'))
+                return redirect(reverse('blog:user', args=[user.id]))
             else:
                 return render(request, 'blog/login.html', {'form': form, 'message':'Wrong account or password, Please try again.'})
     else:
         form = Blog_login()
     return render(request, 'blog/login.html', {'form':form})
 
+class Article_create_view(CreateView):
+    model = Article
+    template_name = 'blog/article_create.html'
+    form_class = Article_form
+
+
+class User_view(DetailView):
+
+    template_name = 'blog/user.html'
+    context_object_name = 'user'
+    model = User
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return User.objects.filter(username__exact=self.request.user.username)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        '''
+        增加返回的属性,比如menu菜单类
+        '''
+        menus = Menu.objects.all()
+        categories = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['menus'] = menus
+        context['categories'] = categories
+        return context
 
 @login_required
-def user(request):
-    user = get_object_or_404(User, username=request.user.username)
-    menus = Menu.objects.all()
-    return render(request, 'blog/user.html', {'user': user, 'menus': menus})
-
-
-@login_required
-def update(request, name):
-    user = get_object_or_404(User, username=name)
+def update(request, pk):
+    user = get_object_or_404(User, pk=pk)
     form = Blog_update(request.POST)
 
     if form.is_valid():

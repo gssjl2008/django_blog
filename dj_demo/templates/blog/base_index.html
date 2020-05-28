@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--  必须先 load static 下面才能使用 static -->
 {% load static %}
+{% load add_label_class  %}
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -15,27 +16,57 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="{% url 'blog:index' %}">Blog</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            {% for menu in menus %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ menu.get_method_url }}"><b>{{ menu.name }}</b></a>
-                    </li>
-            {% endfor %}
-        </ul>
-            <form class="form-inline mt-2 mt-md-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <a class="navbar-brand" href="{% url 'blog:index' %}">Blog</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    {% for menu in menus %}
+                        {% if menu.method == 'user' or menu.method == 'update' %}
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{%  call_method menu 'get_method_url' user.id %}"><b>{{ menu.name }}</b></a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{ menu.get_method_url }}"><b>{{ menu.name }}</b></a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+{#                    <li><a href="" class="nav-link active"><b>设置</b></a></li>#}
+                </ul>
 
+    {#                <form class="form-inline mt-2 mt-md-0">#}
+    {#                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">#}
+    {#                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>#}
+    {#                </form>#}
+                </div>
+            </nav>
+            <br><br>
+    <div class="container-fluid" role="main">
+    <div class="d-flex align-items-center p-3 my-3  bg-purple rounded shadow-sm">
+        {% block content %}
+        {% endblock %}
+    </div>
+    </div>
+
+    
+    
+        <div class="row border bg-light fixed-bottom">
+            <footer class="container">
+                Copy right
+                {% block foot %}
+
+                {% endblock %}
+            </footer>
         </div>
-    </nav>
-    {% block content %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    {% block script %}
+
     {% endblock %}
 </body>
 </html>
