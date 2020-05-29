@@ -52,11 +52,30 @@ class Index_view(ListView):
         return Article.objects.filter(id=self.request.user.id)
 
 
+class Article_view(DetailView):
+    model = Article
+    template_name = 'blog/article.html'
+    context_object_name = 'article'
 
-@login_required
-def article(request, id):
-    article = get_object_or_404(Article, id=id)
-    return render(request, 'blog/article.html', {'article': article})
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        obj.add_view()
+        return obj
+
+    def get_queryset(self):
+        '''
+        过滤用户只能看到自己的文章,
+        '''
+        return Article.objects.filter(id=self.request.user.id)
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+# @login_required
+# def article(request, id):
+#     article = get_object_or_404(Article, id=id)
+#     return render(request, 'blog/article.html', {'article': article})
 
 @login_required
 def admin(request):
@@ -97,7 +116,10 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if  user is not None and user.is_active:
                 auth.login(request, user)
-                return redirect(reverse('blog:user', args=[user.id]))
+                response = redirect(reverse('blog:user', args=[user.id]))
+                response.set_cookie('admin', 'admin', expires=60)
+                return response
+                # return redirect(reverse('blog:user', args=[user.id]))
             else:
                 return render(request, 'blog/login.html', {'form': form, 'message':'Wrong account or password, Please try again.'})
     else:

@@ -23,7 +23,7 @@
                     {% for article in articles %}
                         <!-- article 必须传入参数， article.id 作为参数传入 -->
                         <li>
-                   <a href="{{ article.get_absolute_url }}">{{ article.title }} {{ article.author}}{{article.create_time|date:"Y-m-d H:i"}}</a>
+                   <a href="{{ article.get_absolute_url }}">{{ article.title }} {{ article.author}}{{article.create_time|date:"Y-m-d H:i"}} 阅读量:{{ article.views }}</a>
                         </li>
                     {% endfor %}
                     <!--1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>-->

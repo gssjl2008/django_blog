@@ -6,13 +6,13 @@
 
 from django.urls.conf import path
 from django.contrib.auth.views import LogoutView
-from .views import Index_view, article, admin, about, contact, login, register, update, User_view
+from .views import Index_view, admin, about, contact, login, register, update, User_view, Article_view
 
 app_name = 'blog'
 urlpatterns = [
     # path('', index, name='index'),
     path('', Index_view.as_view(), name='index'),
-    path('article/<int:id>', article, name='article'),
+    path('article/<int:pk>', Article_view.as_view(), name='article'),
     path('admin', admin, name='admin'),
     path('about', about, name='about'),
     path('contact', contact, name='contact'),

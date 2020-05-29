@@ -77,6 +77,7 @@ class Article(models.Model):
     modity_time = models.DateTimeField(verbose_name='修改时间', auto_now_add=True)
     category = models.ForeignKey(Category, verbose_name='类型' ,on_delete=models.CASCADE, related_name='categories')
     tag = models.ManyToManyField(Tag, verbose_name='标签' ,related_name='tags', blank=True)
+    views = models.PositiveIntegerField(verbose_name='阅读量', default=0)
 
     def get_absolute_url(self):
         '''
@@ -85,6 +86,11 @@ class Article(models.Model):
         '''
         from django.urls import reverse
         return reverse('blog:article', args=[str(self.id)])
+
+    # 自动记录阅读数量
+    def add_view(self):
+        self.views += 1
+        self.save(update_fields=['views'])
 
     class Meta:
         verbose_name = 'Article'
