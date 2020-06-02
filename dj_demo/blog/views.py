@@ -24,6 +24,8 @@ class Index_view(ListView):
 
     template_name = 'blog/index.html'
     context_object_name = 'articles'
+    # QuerySet是惰性的, 查询具体的值时候才会去数据库查询，
+    # 当数据量非常大时， 使用 Article.objects.all().order_by('-create_time').values('title', 'text')
     queryset = Article.objects.all().order_by('-create_time')
     http_method_names = 'get'       # 限制使用的方法
 

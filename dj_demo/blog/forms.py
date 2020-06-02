@@ -39,7 +39,12 @@ class Blog_register(forms.Form):
     disabled=False,              是否可以编辑
     label_suffix=None            Label内容后缀
     '''
-    username = forms.CharField(label='Username', max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
+    username = forms.CharField(label='Username',
+                               max_length=50,
+                               widget=forms.TextInput(attrs={'class':'form-control'}),
+                               error_messages={
+                                   'max_length': 'Username max long not than 50'
+                               })
     email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={'class':'form-control'}))
     phone = forms.CharField(label='Phone', max_length=20, required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
@@ -157,3 +162,6 @@ class Article_form(forms.Form):
     text = forms.CharField(label='正文', widget=forms.TextInput(attrs={'class':'form-control'}))
     # category = forms.ChoiceField(choices=([1, ]))
     # tag = models.ManyToManyField(Tag, verbose_name='标签' ,related_name='tags', blank=True)
+
+class File_form(forms.Form):
+    ...
